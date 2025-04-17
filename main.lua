@@ -19,6 +19,7 @@ clear_screen()
 move_cursor_to( {1, 1} )
 local input = ""
 repeat
+
   input = io.read(1)
 until input == "q"
 input = nil
