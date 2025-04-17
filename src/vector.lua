@@ -1,16 +1,27 @@
 
-local vector_ = {0, 0, a = 0}
+local vector = {}
 
-local set_ = function(value)
-  vector_[which] = value
+vector[1] = 0
+vector[2] = 0
+
+vector.get = function(self, index)
+  -- check if getting at index is allowed
+  if index ~= 1 and index ~= 2 then return end
+
+  return self[index]
 end
 
-local get_ = function(self, which)
-  return self[which]
+vector.set = function(self, index, value)
+  -- check if setting at index is allowed
+  if index ~= 1 and index ~= 2 then return end
+  self[index] = value
 end
 
-return {
-  get = get_,
-  set = set_
-}
+vector.new = function()
+  local _ = {}
+  setmetatable(_, {__index = vector} )
+  return _
+end
+
+return vector
 
