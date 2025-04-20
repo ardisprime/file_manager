@@ -26,8 +26,8 @@ send_ctrl_seq = function(sequence)
 end
 
 move_cursor_to = function(position)
-  if (type(position) ~= "table") or (#(position) ~= 2) then print("wrong values") return end
-  send_ctrl_seq(position[1] .. ";" .. position[2] .. "H")
+  if (type(position) ~= "table") or (#(position) ~= 2) then print("move_cursor_to: wrong inputs") return end
+  send_ctrl_seq(position[2] .. ";" .. position[1] .. "H")
 end
 
 clear_screen = function()

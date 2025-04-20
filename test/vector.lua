@@ -7,8 +7,8 @@ vector = require(paths.vector)
 v1 = vector.new()
 
 -- start values and get function
-assert(v1:get(1) == 0)
-assert(v1:get(2) == 0)
+assert(v1:get(1) == 1)
+assert(v1:get(2) == 1)
 
 -- changing values
 new_values = {5, 10}

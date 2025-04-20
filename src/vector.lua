@@ -1,8 +1,8 @@
 
 local vector = {}
 
-vector[1] = 0
-vector[2] = 0
+vector[1] = 1
+vector[2] = 1
 
 vector.get = function(self, index)
   -- check if getting at index is allowed

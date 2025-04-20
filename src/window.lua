@@ -11,14 +11,30 @@ window.position = vector.new()
 window.size = vector.new()
 window.buffer = {}
 
-window.print_at = function(position, string_)
-  move_cursor_to(position)
+window.print_at = function(self, position, string_)
   -- TODO implement buffer write
+  -- prepare buffer if its not bit enough
+  -- insert characters
+end
+
+window.refresh = function(self)
+  local char
+  for y=1,self.size[2] do
+    for x=1,self.size[1] do
+      move_cursor_to( {x, y} )
+      if (# self.buffer < y) or (# self.buffer[y] < x) then
+        char = " "
+      else
+        char = string.sub(self.buffer[y], x, x) 
+      end
+      io.write(char)
+    end
+  end
 end
 
 window.new = function(position, size)
   for i=1,2 do 
-    if (size[i] <= 0) or (position[i] < 0) then return nil end
+    if (size[i] <= 0) or (position[i] <= 0) then return nil end
   end
   local _ = {}
   setmetatable(_, {__index = window} )
