@@ -10,13 +10,27 @@ local window = require(paths.window)
 require(paths.control_sequence)
 
 -- local w1 = window.new( {1, 1}, {10, 10} )
-local w1 = window.new( {10, 10}, {10, 5} )
+local w1 = window.new( {1, 1}, {20, 20} )
 
-print(string.sub("hello", 2) )
+local files = {}
+
+path = "/home/chris/.config"
+handler = io.popen("ls -FQ --group-directories-first " .. path) 
+
+buffer = ""
+while buffer ~= nil do
+  buffer = handler:read("*l")
+  files[(# files)+1] = buffer
+end
+
+print(type(files) )
+for k,v in ipairs(files) do print(k .. ": " .. v) end
+
+os.exit()
 
 -- set terminal in raw mode without echo
 os.execute("stty raw -echo")
-  
+
 -- main loop
 clear_screen()
 move_cursor_to( {2, 2} )

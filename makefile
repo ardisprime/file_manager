@@ -1,10 +1,14 @@
 
+TEST_FILES = $(wildcard test/*.lua)
+
 all: debug 
 
 debug: test main
 
-test: FORCE
-	lua $(wildcard test/*.lua)
+test: $(TEST_FILES)
+
+test/%.lua: FORCE
+	lua $@
 
 main: 
 	lua main.lua

@@ -11,6 +11,10 @@ window.position = vector.new()
 window.size = vector.new()
 window.buffer = {}
 
+window.get_buffer_line = function(self, line)
+  return self.buffer[line]
+end
+
 window.print_at = function(self, position, str)
   for i=1,2 do 
     if position[i] <= 0 then return nil end

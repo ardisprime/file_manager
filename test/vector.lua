@@ -24,3 +24,5 @@ v2:set(2, new_values[1])
 assert(v1:get(1) == v2:get(2) )
 assert(v1:get(2) == v2:get(1) )
 
+print("vector test PASSED")
+
