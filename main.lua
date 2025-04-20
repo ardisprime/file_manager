@@ -10,7 +10,7 @@ local window = require(paths.window)
 require(paths.control_sequence)
 
 -- local w1 = window.new( {1, 1}, {10, 10} )
-local w1 = window.new( {1, 1}, {10, 5} )
+local w1 = window.new( {10, 10}, {10, 5} )
 
 print(string.sub("hello", 2) )
 
@@ -22,7 +22,7 @@ clear_screen()
 move_cursor_to( {2, 2} )
 local input = ""
 repeat
-  -- w1:print_at( {5, 5}, "hello")
+  w1:print_at( {1, 1}, "hello")
   w1:refresh()
 
   input = io.read(1)
