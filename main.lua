@@ -1,48 +1,46 @@
 
--- windows
---  o window
---   o position -> vector
---   o size -> vector
---   o buffer
+-- file manager:
+-- # o window:
+-- #   o position -> vector
+-- #   o size -> vector
+-- #   o buffer
+--   o files:
+-- #   o ls
+--     o cd
+--     o make file/dir
+--     o del
+--     o mv
+--     o rename
 
 local paths = require "paths"
 local window = require(paths.window)
+local files = require(paths.files)
 require(paths.control_sequence)
 
--- local w1 = window.new( {1, 1}, {10, 10} )
 local w1 = window.new( {1, 1}, {20, 20} )
-
-local files = {}
-
-path = "/home/chris/.config"
-handler = io.popen("ls -FQ --group-directories-first " .. path) 
-
-buffer = ""
-while buffer ~= nil do
-  buffer = handler:read("*l")
-  files[(# files)+1] = buffer
-end
-
-print(type(files) )
-for k,v in ipairs(files) do print(k .. ": " .. v) end
-
-os.exit()
+local f1 = files.new()
 
 -- set terminal in raw mode without echo
 os.execute("stty raw -echo")
 
 -- main loop
-clear_screen()
-move_cursor_to( {2, 2} )
 local input = ""
+local buf = ""
+clear_screen()
 repeat
-  w1:print_at( {1, 1}, "hello")
+  -- print the file list in current path
+  buf = f1:list()
+  for i=1,w1.size:get(2) do
+    if buf[i] ~= nil then 
+      w1:print_at( {2, i}, buf[i] )
+    end
+  end
   w1:refresh()
 
+  -- get input
   input = io.read(1)
 until input == "q"
-input = nil
-
+  
 -- set terminal back in cooked mode with echo
 os.execute("stty cooked echo")
 
