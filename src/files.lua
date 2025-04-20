@@ -7,6 +7,10 @@ files.get_path = function(self)
   return self.path
 end
 
+files.change_directory = function(self, delta_path)
+  self.path = self.path .. "/" .. string.sub(delta_path, 1, string.len(delta_path)-1 )
+end
+
 files.list = function(self)
     
   local handler = io.popen("ls -FQ --group-directories-first " .. self:get_path() )
