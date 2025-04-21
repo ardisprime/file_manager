@@ -22,14 +22,19 @@ files.change_directory = function(self, delta_path)
   if delta_path == "../" then
     self.path = go_back_a_directoy(self.path)
     return
+  elseif delta_path == "./" then
+    return
   end
+  if string.sub(delta_path, # delta_path) ~= "/" then return end
   -- add the delta path to the current path
   self.path = self.path .. string.sub(delta_path, 1, string.len(delta_path)-1 ) .. "/"
 end
 
-files.list = function(self)
+files.list = function(self, flags)
 
-  local handler = io.popen("ls -FQ --group-directories-first " .. self:get_path() )
+  flags = flags .. " -FQ --group-directories-first"
+
+  local handler = io.popen("ls " .. flags .. " \"" .. self:get_path() .."\"")
   -- read all file names out of handler output
   local file_list = {}
   local buffer = handler:read()
