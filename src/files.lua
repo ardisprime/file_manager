@@ -7,12 +7,28 @@ files.get_path = function(self)
   return self.path
 end
 
+local go_back_a_directoy = function(path)
+  -- find the last segment
+  local finds = {string.find(path, "/") }
+  while finds[# finds] ~= string.len(path) do
+    finds[ (# finds)+1] = string.find(path, "/", finds[# finds]+1 )
+  end 
+  -- cut it off
+  return string.sub(path, 1, finds[ (# finds)-1]-1) .. "/"
+end
+
 files.change_directory = function(self, delta_path)
-  self.path = self.path .. "/" .. string.sub(delta_path, 1, string.len(delta_path)-1 )
+  -- remove the last part if going back
+  if delta_path == "../" then
+    self.path = go_back_a_directoy(self.path)
+    return
+  end
+  -- add the delta path to the current path
+  self.path = self.path .. string.sub(delta_path, 1, string.len(delta_path)-1 ) .. "/"
 end
 
 files.list = function(self)
-    
+
   local handler = io.popen("ls -FQ --group-directories-first " .. self:get_path() )
   -- read all file names out of handler output
   local file_list = {}
@@ -31,15 +47,17 @@ files.list = function(self)
     end
     file_list[i] = string.sub(file_list[i], 2, string.find(file_list[i], "\"", 2)-1 ) .. id_ch
   end
-  
+
   return file_list
 end
 
 files.new = function()
   local _ = {}
   setmetatable(_, {__index = files} )
+  local handler = io.popen("echo $PWD")
+  _.path = handler:read() .. "/"
   return _
 end
 
 return files
-  
+

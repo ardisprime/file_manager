@@ -42,6 +42,7 @@ repeat
     end
   end
   w1:print_at( {1, selection}, selection_char)
+  w1:print_at( {1, 15}, f1:get_path() )
   w1:refresh()
 
   -- input handling
