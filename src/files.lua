@@ -1,10 +1,20 @@
 
 local files = {}
 
-files.path = "$HOME"
-
 files.get_path = function(self)
   return self.path
+end
+
+files.remove = function(self, name)
+  os.execute("rm " .. self.path .. name)  
+end
+
+files.make = function(self, name)
+  local command = "touch "
+  if string.sub(name, string.len(name) ) == "/" then
+    command = "mkdir "
+  end
+  os.execute(command .. self.path .. name)
 end
 
 local go_back_a_directoy = function(path)
@@ -24,6 +34,7 @@ files.change_directory = function(self, delta_path)
     return
   elseif delta_path == "./" then
     return
+  elseif delta_path == nil then return
   end
   if string.sub(delta_path, # delta_path) ~= "/" then return end
   -- add the delta path to the current path
@@ -34,7 +45,7 @@ files.list = function(self, flags)
 
   flags = flags .. " -FQ --group-directories-first"
 
-  local handler = io.popen("ls " .. flags .. " \"" .. self:get_path() .."\"")
+  local handler = io.popen("ls " .. flags .. " \"" .. files.get_path(self) .."\"")
   -- read all file names out of handler output
   local file_list = {}
   local buffer = handler:read()
@@ -58,7 +69,6 @@ end
 
 files.new = function()
   local _ = {}
-  setmetatable(_, {__index = files} )
   local handler = io.popen("echo $PWD")
   _.path = handler:read() .. "/"
   return _

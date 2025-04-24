@@ -7,22 +7,22 @@ vector = require(paths.vector)
 v1 = vector.new()
 
 -- start values and get function
-assert(v1:get(1) == 1)
-assert(v1:get(2) == 1)
+assert(vector.get(v1, 1) == 1)
+assert(vector.get(v1, 2) == 1)
 
 -- changing values
 new_values = {5, 10}
-v1:set(1, new_values[1])
-v1:set(2, new_values[2])
-assert(v1:get(1) == new_values[1] )
-assert(v1:get(2) == new_values[2] )
-  
+vector.set(v1, 1, new_values[1])
+vector.set(v1, 2, new_values[2])
+assert(vector.get(v1, 1) == new_values[1] )
+assert(vector.get(v1, 2) == new_values[2] )
+
 -- 2 vectors working independently
 v2 = vector.new()
-v2:set(1, new_values[2])
-v2:set(2, new_values[1])
-assert(v1:get(1) == v2:get(2) )
-assert(v1:get(2) == v2:get(1) )
+vector.set(v2, 1, new_values[2])
+vector.set(v2, 2, new_values[1])
+assert(vector.get(v1, 1) == vector.get(v2, 2) )
+assert(vector.get(v1, 2) == vector.get(v2, 1) )
 
-print("vector test PASSED")
+print("== PASSED: vector test ==")
 

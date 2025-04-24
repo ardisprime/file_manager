@@ -3,6 +3,7 @@
   
 paths = require "paths"
 window = require(paths.window)
+vector = require(paths.vector)
 
 position = {1, 5}
 size = {7, 15}
@@ -10,16 +11,19 @@ str = "hello"
 w1 = window.new(position, size)
 
 -- get position
-assert(position[1] == w1.position:get(1) and position[2] == w1.position:get(2) )
+assert(vector.get(w1.position, 1) == position[1] )
+assert(vector.get(w1.position, 2) == position[2] )
 -- get size
-assert(size[1] == w1.size:get(1) and size[2] == w1.size:get(2) )
+assert(vector.get(w1.size, 1) == size[1] )
+assert(vector.get(w1.size, 2) == size[2] )
 
+-- ?
 -- set position
 -- set size
 
 -- change buffer
-w1:print_at( {2, position[2]-1}, str)
-assert(w1:get_buffer_line(position[2]-1) == " hello")
+window.print_at(w1, {2, 2}, str)
+assert(window.get_buffer_line(w1, 2) == " hello")
 
 print("window test PASSED")
   

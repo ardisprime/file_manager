@@ -1,15 +1,8 @@
 
--- control sequences:
---  o \27[35m
-
 paths = require "paths"
 vector = require(paths.vector)
 
 local window = {}
-
-window.position = vector.new()
-window.size = vector.new()
-window.buffer = {}
 
 window.get_buffer_line = function(self, line)
   return self.buffer[line]
@@ -52,16 +45,25 @@ window.refresh = function(self)
   end
 end
 
+local update_position_size = function(position_, size_, position, size)
+  for i=1,2 do
+    position_:set(i, position[i])
+    size_:set(i, size[i])
+  end
+end
+
 window.new = function(position, size)
   for i=1,2 do 
     if (size[i] <= 0) or (position[i] <= 0) then return nil end
   end
   local _ = {}
-  setmetatable(_, {__index = window} )
-  for i=1,2 do
-    _.position:set(i, position[i])
-    _.size:set(i, size[i])
-  end
+  _.position = vector.new()
+  vector.set(_.position, 1, position[1] )
+  vector.set(_.position, 2, position[2] )
+  _.size = vector.new()
+  vector.set(_.size, 1, size[1] )
+  vector.set(_.size, 2, size[2] )
+  _.buffer = {}
   return _
 end
 
