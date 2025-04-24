@@ -5,19 +5,31 @@
 -- #   o size -> vector
 -- #   o buffer
 -- #   o clear buffer
---   o files:
+-- # o files:
 -- #   o ls
 -- #   o cd
 -- #   o all toggle
 -- #   o make file/dir
---     o remove
---     o mv
---     o rename
---     o trash
+-- #   o remove to /tmp
+-- #   o copy
+-- #   o paste 
+-- #   o rename
 --   o overlay
+--     o base overlay
+--     o get input string in floating window
+--     o move n lines
+--     o colors <- make symlink to dirs have slash, but symlink color
+--     o visual feedback
 --     o matching terminal size 
 --       o dynamic?
---     o colors <- make symlink to dirs have slash, but symlink color
+--     o layers
+
+-- gnerate a random id to know which files were saved to tmp
+math.randomseed(os.time() )
+id_string = ""
+for i=1,5 do
+  id_string = id_string .. math.random(0, 9)
+end
 
 local paths = require "paths"
 local window = require(paths.window)
@@ -59,7 +71,7 @@ repeat
   input = io.read(1)
   buf = 0
   if input == "l" then 
-    files.change_directory(f1, files.list(f1, list_flags .. " -L")[selection] )
+    files.change_directory(f1, files.selected_file(f1, list_flags, selection) )
   elseif input == "h" then 
     files.change_directory(f1, "../")
   elseif input == "j" then buf = 1 
@@ -72,9 +84,31 @@ repeat
       local start, stop = string.find(list_flags, " %-A")
       list_flags = string.sub(list_flags, 1, start-1) .. string.sub(list_flags, stop+1)
     end
+  elseif input == "r" then 
+    files.rename(f1, "tmp", "tmp2")
+  elseif input == "p" then 
+    files.paste(f1)
+  elseif input == "y" then 
+    -- copy selected file
+    files.copy(f1, files.selected_file(f1, list_flags, selection) )
   elseif input == "d" then 
     -- delete selected file
-    files.remove(f1, files.list(f1, list_flags .. " -L")[selection] )
+    local float_win = window.new( {4, 2}, {20, 5} )
+    local name = files.selected_file(f1, list_flags, selection)
+    local finished = false
+    repeat 
+      window.print_at(float_win, {2, 2}, "DELETE " .. name .. " ?")
+      window.print_at(float_win, {2, 4}, "[y]es/[n]o")
+      window.refresh(float_win) 
+      input = io.read(1)
+      if input == "y" then
+        files.remove(f1, name)
+        finished = true
+      elseif input == "n" then
+        finished = true
+      end
+    until finished
+    float_win = nil
   elseif input == "c" then 
     -- create file or folder
     -- backspace: 127
@@ -105,7 +139,9 @@ repeat
   end 
 
 until input == "q"
-
+  
+-- remove temporary file to keep a clean file system
+files.clear_temporary_file(f1)
 -- set terminal back in cooked mode with echo
 os.execute("setterm --cursor on")
 os.execute("stty cooked echo")
