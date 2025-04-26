@@ -1,14 +1,14 @@
 
 -- window chunk test
   
-paths = require "paths"
-window = require(paths.window)
-vector = require(paths.vector)
+local paths = require "paths"
+local window = require(paths.window)
+local vector = require(paths.vector)
 
-position = {1, 5}
-size = {7, 15}
-str = "hello"
-w1 = window.new(position, size)
+local position = {1, 5}
+local size = {7, 15}
+local str = "hello"
+local w1 = window.new(position, size)
 
 -- get position
 assert(vector.get(w1.position, 1) == position[1] )
@@ -25,5 +25,5 @@ assert(vector.get(w1.size, 2) == size[2] )
 window.print_at(w1, {2, 2}, str)
 assert(window.get_buffer_line(w1, 2) == " hello")
 
-print("window test PASSED")
+print("== PASSED: window test ==")
   

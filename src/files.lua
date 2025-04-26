@@ -35,7 +35,7 @@ files.rename = function(self, old_name, new_name)
   os.execute("mv " .. files.get_path(self) .. old_name .. " " .. files.get_path(self) .. new_name )
 end 
 
-local get_temporary_file = function(self)
+files.get_temporary_file = function(self)
   local tmp_path = self.path
   local file_name
   self.path = "/tmp"
@@ -49,7 +49,7 @@ local get_temporary_file = function(self)
 end
 
 files.clear_temporary_file = function(self)
-  local file_name = get_temporary_file(self)
+  local file_name = files.get_temporary_file(self)
   if file_name == nil then return end
   os.execute("rm -rf /tmp/" .. file_name )
 end
@@ -69,7 +69,7 @@ files.remove = function(self, name)
 end
 
 files.paste = function(self)
-  local file_name = get_temporary_file(self)
+  local file_name = files.get_temporary_file(self)
   if file_name == nil then return end
   os.execute("cp -r /tmp/" .. file_name .. " " .. files.get_path(self) .. string.sub(file_name, string.len(id_string)+1) )
 end

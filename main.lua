@@ -12,8 +12,8 @@
 -- #   o make file/dir
 -- #   o remove to /tmp
 -- #   o copy
--- #   o paste 
--- #   o rename
+--     o paste (rename if file already exists, with floating window) 
+--     o rename
 --   o overlay
 --     o base overlay
 --     o get input string in floating window
@@ -24,19 +24,15 @@
 --       o dynamic?
 --     o layers
 
--- gnerate a random id to know which files were saved to tmp
-math.randomseed(os.time() )
-id_string = ""
-for i=1,5 do
-  id_string = id_string .. math.random(0, 9)
-end
 
 local paths = require "paths"
 local window = require(paths.window)
 local files = require(paths.files)
 local vector = require(paths.vector)
 require(paths.control_sequence)
+require(paths.utils)
 
+id_string = generate_id_string()
 local w1 = window.new( {1, 1}, {20, 20} )
 local f1 = files.new()
 local selection_char = "*"
@@ -139,7 +135,7 @@ repeat
   end 
 
 until input == "q"
-  
+
 -- remove temporary file to keep a clean file system
 files.clear_temporary_file(f1)
 -- set terminal back in cooked mode with echo

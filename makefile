@@ -1,7 +1,7 @@
 
 TEST_FILES = $(wildcard test/*.lua)
 
-all: debug 
+all: test 
 
 debug: test main
 
